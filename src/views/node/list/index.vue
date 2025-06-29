@@ -216,6 +216,7 @@ import NodeDetail from '@/views/node/list/components/NodeDetail'
 import NodeQrcode from '@/views/node/list/components/NodeQrcode'
 import { Message, MessageBox } from 'element-ui'
 import copy from 'copy-to-clipboard'
+import QRCode from 'qrcode'
 import {
   deleteNodeById,
   nodeDefault,
@@ -643,16 +644,43 @@ export default {
       })
     },
     handleQRCode(row) {
-      this.qrCodeSrc = ''
       const tempData = Object.assign({}, row)
-      nodeQRCode(tempData).then((response) => {
-        this.qrCodeSrc = 'data:image/png;base64,' + response.data
-        this.dialogQRCodeVisible = true
+      // 1. 先调用 nodeURL 获取原始链接
+      nodeURL(tempData).then((response) => {
+        let finalUrl = response.data
+        // 2. 如果是 trojan-go 链接，就替换它
+        if (finalUrl.startsWith('trojan-go://')) {
+          finalUrl = finalUrl.replace('trojan-go://', 'trojan://')
+        }
+    
+        // 3. 使用 qrcode 库，将修改后的链接字符串生成为二维码图片数据
+        QRCode.toDataURL(finalUrl, (err, url) => {
+          if (err) {
+            console.error(err)
+            Message({
+              showClose: true,
+              message: 'QR Code generation failed',
+              type: 'error'
+            })
+          } else {
+            // 4. 将生成的图片数据显示在弹窗里
+            this.qrCodeSrc = url
+            this.dialogQRCodeVisible = true
+          }
+        })
       })
     },
     handleCopyURL(row) {
       nodeURL(row).then((response) => {
-        if (copy(response.data)) {
+        // ---- 我们增加的核心代码从这里开始 ----
+        let finalUrl = response.data
+        if (finalUrl.startsWith('trojan-go://')) {
+          finalUrl = finalUrl.replace('trojan-go://', 'trojan://')
+        }
+        // ---- 核心代码在这里结束 ----
+    
+        // 注意下面调用 copy() 函数时，使用的是我们处理过的 finalUrl
+        if (copy(finalUrl)) { 
           Message({
             showClose: true,
             message: this.$t('confirm.urlCopySuccess').toString(),
