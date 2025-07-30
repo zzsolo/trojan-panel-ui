@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(yarn run build:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": []
   }
