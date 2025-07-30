@@ -229,28 +229,22 @@
           <el-tag>{{ nodeInfoProps.xraySettingsEntity.network }}</el-tag>
         </el-form-item>
         <el-form-item
-          :label="$t('table.xraySocksUser').toString()"
-          v-if="isXraySocks(nodeInfoProps)"
+            :label="$t('table.xraySocksUser').toString()"
+            v-if="isXraySocks(nodeInfoProps)"
         >
-          <el-tag>{{
-            nodeInfoProps.xraySettingsEntity.accounts[0].user
-          }}</el-tag>
+          <el-tag>{{ nodeInfoProps.xraySettingsEntity.accounts[0].user }}</el-tag>
         </el-form-item>
         <el-form-item
-          :label="$t('table.xraySocksPass').toString()"
-          v-if="isXraySocks(nodeInfoProps)"
+            :label="$t('table.xraySocksPass').toString()"
+            v-if="isXraySocks(nodeInfoProps)"
         >
-          <el-tag>{{
-            nodeInfoProps.xraySettingsEntity.accounts[0].pass
-          }}</el-tag>
+          <el-tag>{{ nodeInfoProps.xraySettingsEntity.accounts[0].pass }}</el-tag>
         </el-form-item>
         <el-form-item
-          :label="$t('table.xraySocksUdp').toString()"
-          v-if="isXraySocks(nodeInfoProps)"
+            :label="$t('table.xraySocksUdp').toString()"
+            v-if="isXraySocks(nodeInfoProps)"
         >
-          <el-tag>{{
-            enableComputed(nodeInfoProps.xraySettingsEntity.udp)
-          }}</el-tag>
+          <el-tag>{{ enableComputed(nodeInfoProps.xraySettingsEntity.udp) }}</el-tag>
         </el-form-item>
         <el-form-item
           :label="$t('table.xrayFallbacks').toString()"
@@ -370,32 +364,32 @@
           <el-tag>{{ enableComputed(nodeInfoProps.hysteriaFastOpen) }}</el-tag>
         </el-form-item>
         <el-form-item
-          :label="$t('table.hysteria2ObfsPassword').toString()"
-          v-if="isHysteria2(nodeInfoProps)"
+            :label="$t('table.hysteria2ObfsPassword').toString()"
+            v-if="isHysteria2(nodeInfoProps)"
         >
           <el-tag>{{ nodeInfoProps.hysteria2ObfsPassword }}</el-tag>
         </el-form-item>
         <el-form-item
-          :label="$t('table.hysteria2UpMbps').toString()"
-          v-if="isHysteria2(nodeInfoProps)"
+            :label="$t('table.hysteria2UpMbps').toString()"
+            v-if="isHysteria2(nodeInfoProps)"
         >
           <el-tag>{{ nodeInfoProps.hysteria2UpMbps }}</el-tag>
         </el-form-item>
         <el-form-item
-          :label="$t('table.hysteria2DownMbps').toString()"
-          v-if="isHysteria2(nodeInfoProps)"
+            :label="$t('table.hysteria2DownMbps').toString()"
+            v-if="isHysteria2(nodeInfoProps)"
         >
           <el-tag>{{ nodeInfoProps.hysteria2DownMbps }}</el-tag>
         </el-form-item>
         <el-form-item
-          :label="$t('table.hysteria2ServerName').toString()"
-          v-if="isHysteria2(nodeInfoProps)"
+            :label="$t('table.hysteria2ServerName').toString()"
+            v-if="isHysteria2(nodeInfoProps)"
         >
           <el-tag>{{ nodeInfoProps.hysteria2ServerName }}</el-tag>
         </el-form-item>
         <el-form-item
-          :label="$t('table.hysteria2Insecure').toString()"
-          v-if="isHysteria2(nodeInfoProps)"
+            :label="$t('table.hysteria2Insecure').toString()"
+            v-if="isHysteria2(nodeInfoProps)"
         >
           <el-tag>{{ enableComputed(nodeInfoProps.hysteria2Insecure) }}</el-tag>
         </el-form-item>
@@ -480,9 +474,7 @@ export default {
   computed: {
     enableComputed() {
       return function (enable) {
-        return enable && (enable === true || enable === 1)
-          ? this.$t('table.enable')
-          : this.$t('table.disable')
+        return (enable && (enable === true || enable === 1)) ? this.$t('table.enable') : this.$t('table.disable')
       }
     }
   },

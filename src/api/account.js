@@ -9,8 +9,7 @@ export function login(data) {
   return request({
     url: '/auth/login',
     method: 'post',
-    data,
-    timeout: 15000 // 登录操作需要更长超时时间
+    data
   })
 }
 
@@ -73,8 +72,7 @@ export function deleteAccountById(data) {
   return request({
     url: '/account/deleteAccountById',
     method: 'post',
-    data,
-    timeout: 15000 // 删除操作需要更长超时时间
+    data
   })
 }
 
@@ -126,8 +124,7 @@ export function createAccount(data) {
   return request({
     url: '/account/createAccount',
     method: 'post',
-    data,
-    timeout: 20000 // 创建操作需要更长超时时间
+    data
   })
 }
 
@@ -140,8 +137,7 @@ export function updateAccountById(data) {
   return request({
     url: '/account/updateAccountById',
     method: 'post',
-    data,
-    timeout: 15000 // 更新操作需要更长超时时间
+    data
   })
 }
 
@@ -192,8 +188,7 @@ export function exportAccount(data) {
   return request({
     url: '/account/exportAccount',
     method: 'post',
-    data,
-    timeout: 60000 // 导出操作需要更长超时时间
+    data
   })
 }
 
@@ -232,8 +227,7 @@ export function createAccountBatch(data) {
   return request({
     url: '/account/createAccountBatch',
     method: 'post',
-    data,
-    timeout: 30000 // 批量创建操作需要更长超时时间
+    data
   })
 }
 

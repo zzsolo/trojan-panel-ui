@@ -81,35 +81,11 @@ const actions = {
             return reject(this.$t('confirm.authFail'))
           }
 
-          const { username, roles, role_id } = data
-
-          // 角色映射：将role_id映射为角色字符串
-          let mappedRoles = []
-          if (roles && Array.isArray(roles)) {
-            // 如果后端已经返回了正确的角色数组
-            mappedRoles = roles
-          } else if (role_id !== undefined) {
-            // 如果后端返回的是role_id，进行映射
-            switch (role_id) {
-              case 1:
-                mappedRoles = ['sysadmin']
-                break
-              case 2:
-                mappedRoles = ['admin']
-                break
-              case 3:
-              default:
-                mappedRoles = ['user']
-                break
-            }
-          } else if (roles && typeof roles === 'string') {
-            // 如果后端返回的是单个角色字符串
-            mappedRoles = [roles]
-          }
+          const { username, roles } = data
 
           commit('SET_USERNAME', username)
-          commit('SET_ROLES', mappedRoles)
-          resolve({ ...data, roles: mappedRoles })
+          commit('SET_ROLES', roles)
+          resolve(data)
         })
         .catch((error) => {
           reject(error)

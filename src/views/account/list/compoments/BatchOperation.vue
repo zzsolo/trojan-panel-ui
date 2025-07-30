@@ -17,10 +17,7 @@
           type="number"
         />
       </el-form-item>
-      <el-form-item
-        :label="$t('table.presetQuota').toString()"
-        prop="presetQuota"
-      >
+      <el-form-item :label="$t('table.presetQuota').toString()" prop="presetQuota">
         <el-input-number
           v-model.number="temp.presetQuota"
           controls-position="right"

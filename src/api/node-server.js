@@ -22,8 +22,7 @@ export function createNodeServer(data) {
   return request({
     url: '/nodeServer/createNodeServer',
     method: 'post',
-    data,
-    timeout: 20000 // 创建服务器操作需要更长超时时间
+    data
   })
 }
 
@@ -49,8 +48,7 @@ export function deleteNodeServerById(data) {
   return request({
     url: '/nodeServer/deleteNodeServerById',
     method: 'post',
-    data,
-    timeout: 15000 // 删除服务器操作需要更长超时时间
+    data
   })
 }
 
@@ -63,8 +61,7 @@ export function updateNodeServerById(data) {
   return request({
     url: '/nodeServer/updateNodeServerById',
     method: 'post',
-    data,
-    timeout: 15000 // 更新服务器操作需要更长超时时间
+    data
   })
 }
 
@@ -103,8 +100,7 @@ export function exportNodeServer(data) {
   return request({
     url: '/nodeServer/exportNodeServer',
     method: 'post',
-    data,
-    timeout: 60000 // 导出服务器操作需要更长超时时间
+    data
   })
 }
 
@@ -117,7 +113,6 @@ export function importNodeServer(data) {
   return request({
     url: '/nodeServer/importNodeServer',
     method: 'post',
-    data,
-    timeout: 30000 // 导入服务器操作需要更长超时时间
+    data
   })
 }

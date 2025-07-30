@@ -35,8 +35,7 @@ export function createNode(data) {
   return request({
     url: '/node/createNode',
     method: 'post',
-    data,
-    timeout: 20000 // 创建节点操作需要更长超时时间
+    data
   })
 }
 
@@ -62,8 +61,7 @@ export function deleteNodeById(data) {
   return request({
     url: '/node/deleteNodeById',
     method: 'post',
-    data,
-    timeout: 15000 // 删除节点操作需要更长超时时间
+    data
   })
 }
 
@@ -76,8 +74,7 @@ export function updateNodeById(data) {
   return request({
     url: '/node/updateNodeById',
     method: 'post',
-    data,
-    timeout: 15000 // 更新节点操作需要更长超时时间
+    data
   })
 }
 

@@ -645,21 +645,14 @@ export default {
     handleQRCode(row) {
       this.qrCodeSrc = ''
       const tempData = Object.assign({}, row)
-      // 添加参数指示使用trojan://协议
-      tempData.useTrojanProtocol = true
       nodeQRCode(tempData).then((response) => {
         this.qrCodeSrc = 'data:image/png;base64,' + response.data
         this.dialogQRCodeVisible = true
       })
     },
     handleCopyURL(row) {
-      const tempData = Object.assign({}, row)
-      // 添加参数指示使用trojan://协议
-      tempData.useTrojanProtocol = true
-      nodeURL(tempData).then((response) => {
-        // 处理URL数据：将trojan-go://替换为trojan://
-        const urlData = this.replaceTrojanGoProtocol(response.data)
-        if (copy(urlData)) {
+      nodeURL(row).then((response) => {
+        if (copy(response.data)) {
           Message({
             showClose: true,
             message: this.$t('confirm.urlCopySuccess').toString(),
@@ -697,14 +690,6 @@ export default {
           })
         }
       })
-    },
-
-    // 替换trojan-go://协议头为trojan://
-    replaceTrojanGoProtocol(data) {
-      if (!data || typeof data !== 'string') return data
-      
-      // 替换所有trojan-go://为trojan://
-      return data.replace(/trojan-go:\/\//g, 'trojan://')
     }
   }
 }

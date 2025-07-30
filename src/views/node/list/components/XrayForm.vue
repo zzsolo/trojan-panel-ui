@@ -1,95 +1,95 @@
 <template>
   <div v-if="formVisibleProps">
     <el-form-item
-      :label="$t('table.xrayProtocol').toString()"
-      prop="xrayProtocol"
+        :label="$t('table.xrayProtocol').toString()"
+        prop="xrayProtocol"
     >
       <el-select
-        v-model="nodeProps.xrayProtocol"
-        controls-position="right"
-        @change="xrayProtocolChange"
+          v-model="nodeProps.xrayProtocol"
+          controls-position="right"
+          @change="xrayProtocolChange"
       >
         <el-option
-          :label="item"
-          :value="item"
-          :key="index"
-          v-for="(item, index) in xrayProtocols"
+            :label="item"
+            :value="item"
+            :key="index"
+            v-for="(item, index) in xrayProtocols"
         ></el-option>
       </el-select>
     </el-form-item>
     <el-form-item
-      :label="$t('table.xrayStreamSettingsNetwork').toString()"
-      prop="xrayStreamSettingsEntity.network"
-      v-if="
+        :label="$t('table.xrayStreamSettingsNetwork').toString()"
+        prop="xrayStreamSettingsEntity.network"
+        v-if="
         !(isXrayShadowsocksAEAD(nodeProps) || isXrayShadowsocks2022(nodeProps))
       "
     >
       <el-select
-        v-model="nodeProps.xrayStreamSettingsEntity.network"
-        controls-position="right"
-        @change="xrayStreamSettingsNetworkChange"
+          v-model="nodeProps.xrayStreamSettingsEntity.network"
+          controls-position="right"
+          @change="xrayStreamSettingsNetworkChange"
       >
         <el-option
-          :label="item"
-          :value="item"
-          :key="item"
-          v-for="item in xrayStreamSettingsNetworks"
+            :label="item"
+            :value="item"
+            :key="item"
+            v-for="item in xrayStreamSettingsNetworks"
         ></el-option>
       </el-select>
     </el-form-item>
 
     <XrayFormWebSocket
-      :form-visible-props="isXrayWs(nodeProps) && !isXrayShadowsocks(nodeProps)"
-      :node-props="nodeProps"
+        :form-visible-props="isXrayWs(nodeProps) && !isXrayShadowsocks(nodeProps)"
+        :node-props="nodeProps"
     />
 
     <el-form-item
-      :label="$t('table.xrayStreamSettingsSecurity').toString()"
-      prop="xrayStreamSettingsEntity.security"
-      v-if="!isXrayShadowsocks(nodeProps)"
+        :label="$t('table.xrayStreamSettingsSecurity').toString()"
+        prop="xrayStreamSettingsEntity.security"
+        v-if="!isXrayShadowsocks(nodeProps)"
     >
       <el-select
-        v-model="nodeProps.xrayStreamSettingsEntity.security"
-        controls-position="right"
-        @change="xrayStreamSettingsSecurityChange"
+          v-model="nodeProps.xrayStreamSettingsEntity.security"
+          controls-position="right"
+          @change="xrayStreamSettingsSecurityChange"
       >
         <el-option
-          :label="item"
-          :value="item"
-          :key="item"
-          v-for="item in xrayStreamSettingsSecuritys"
+            :label="item"
+            :value="item"
+            :key="item"
+            v-for="item in xrayStreamSettingsSecuritys"
         ></el-option>
       </el-select>
     </el-form-item>
 
     <XrayFormTls
-      :form-visible-props="isXrayStreamSettingsSecurityTls(nodeProps)"
-      :node-props="nodeProps"
+        :form-visible-props="isXrayStreamSettingsSecurityTls(nodeProps)"
+        :node-props="nodeProps"
     />
 
     <XrayFormReality
-      :form-visible-props="isXrayStreamSettingsSecurityReality(nodeProps)"
-      :node-props="nodeProps"
+        :form-visible-props="isXrayStreamSettingsSecurityReality(nodeProps)"
+        :node-props="nodeProps"
     />
 
     <el-form-item
-      :label="$t('table.xrayFlow').toString()"
-      prop="xrayFlow"
-      v-if="showXrayFlow(nodeProps)"
+        :label="$t('table.xrayFlow').toString()"
+        prop="xrayFlow"
+        v-if="showXrayFlow(nodeProps)"
     >
       <el-select v-model="nodeProps.xrayFlow" controls-position="right">
         <el-option
-          :label="item"
-          :value="item"
-          :key="index"
-          v-for="(item, index) in xrayFlows"
+            :label="item"
+            :value="item"
+            :key="index"
+            v-for="(item, index) in xrayFlows"
         ></el-option>
       </el-select>
     </el-form-item>
     <el-form-item
-      :label="$t('table.xraySSMethod').toString()"
-      prop="xraySSMethod"
-      v-if="
+        :label="$t('table.xraySSMethod').toString()"
+        prop="xraySSMethod"
+        v-if="
         isXrayShadowsocks(nodeProps) ||
         isXrayShadowsocksAEAD(nodeProps) ||
         isXrayShadowsocks2022(nodeProps)
@@ -97,84 +97,77 @@
     >
       <el-select v-model="nodeProps.xraySSMethod" controls-position="right">
         <el-option
-          :label="item"
-          :value="item"
-          :key="index"
-          v-for="(item, index) in xraySSMethods"
+            :label="item"
+            :value="item"
+            :key="index"
+            v-for="(item, index) in xraySSMethods"
         ></el-option>
       </el-select>
     </el-form-item>
     <el-form-item
-      :label="$t('table.xraySSNetwork').toString()"
-      prop="xraySettingsEntity.network"
-      v-if="
-        isXrayShadowsocksAEAD(nodeProps) || isXrayShadowsocks2022(nodeProps)
+        :label="$t('table.xraySSNetwork').toString()"
+        prop="xraySettingsEntity.network"
+        v-if="
+        isXrayShadowsocksAEAD(nodeProps) ||
+        isXrayShadowsocks2022(nodeProps)
       "
     >
       <el-select
-        v-model="nodeProps.xraySettingsEntity.network"
-        controls-position="right"
+          v-model="nodeProps.xraySettingsEntity.network"
+          controls-position="right"
       >
         <el-option
-          :label="item"
-          :value="item"
-          :key="index"
-          v-for="(item, index) in xraySettingsNetworks"
+            :label="item"
+            :value="item"
+            :key="index"
+            v-for="(item, index) in xraySettingsNetworks"
         ></el-option>
       </el-select>
     </el-form-item>
     <el-form-item
-      :label="$t('table.xrayFallbacks').toString()"
-      prop="xraySettingsEntity.fallbacks"
-      v-if="showFallback(nodeProps)"
+        :label="$t('table.xrayFallbacks').toString()"
+        prop="xraySettingsEntity.fallbacks"
+        v-if="showFallback(nodeProps)"
     >
       <el-tag
-        v-for="(item, index) in nodeProps.xraySettingsEntity.fallbacks"
-        :key="index"
-        :disable-transitions="true"
-        type="success"
-        @close="deleteFallbackProps(item)"
-        effect="dark"
-        size="medium"
-        closable
-        @click="handleFallbackDetailProps(item)"
+          v-for="(item, index) in nodeProps.xraySettingsEntity.fallbacks"
+          :key="index"
+          :disable-transitions="true"
+          type="success"
+          @close="deleteFallbackProps(item)"
+          effect="dark"
+          size="medium"
+          closable
+          @click="handleFallbackDetailProps(item)"
       >
         {{ item.dest }}
       </el-tag>
       <el-button
-        type="primary"
-        size="mini"
-        icon="el-icon-plus"
-        @click="handleCreateFallbackProps"
+          type="primary"
+          size="mini"
+          icon="el-icon-plus"
+          @click="handleCreateFallbackProps"
       ></el-button>
     </el-form-item>
-    <el-form-item
-      :label="$t('table.xraySocksUser').toString()"
-      prop="xraySettingsEntity.accounts[0].user"
-      v-if="isXraySocks(nodeProps)"
-    >
+    <el-form-item :label="$t('table.xraySocksUser').toString()" prop="xraySettingsEntity.accounts[0].user" v-if="isXraySocks(nodeProps)">
       <el-input v-model="nodeProps.xraySettingsEntity.accounts[0].user" />
     </el-form-item>
-    <el-form-item
-      :label="$t('table.xraySocksPass').toString()"
-      prop="xraySettingsEntity.accounts[0].pass"
-      v-if="isXraySocks(nodeProps)"
-    >
+    <el-form-item :label="$t('table.xraySocksPass').toString()" prop="xraySettingsEntity.accounts[0].pass" v-if="isXraySocks(nodeProps)">
       <el-input v-model="nodeProps.xraySettingsEntity.accounts[0].pass" />
     </el-form-item>
     <el-form-item
-      :label="$t('table.xraySocksUdp').toString()"
-      prop="xraySettingsEntity.udp"
-      v-if="isXraySocks(nodeProps)"
+        :label="$t('table.xraySocksUdp').toString()"
+        prop="xraySettingsEntity.udp"
+        v-if="isXraySocks(nodeProps)"
     >
       <el-switch
-        v-model="nodeProps.xraySettingsEntity.udp"
-        active-color="#13ce66"
-        inactive-color="#ff4949"
-        :active-text="$t('table.enable').toString()"
-        :inactive-text="$t('table.disable').toString()"
-        :active-value="true"
-        :inactive-value="false"
+          v-model="nodeProps.xraySettingsEntity.udp"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+          :active-text="$t('table.enable').toString()"
+          :inactive-text="$t('table.disable').toString()"
+          :active-value="true"
+          :inactive-value="false"
       >
       </el-switch>
     </el-form-item>
@@ -191,8 +184,7 @@ import {
   isXrayShadowsocksAEAD,
   isXraySocks,
   isXrayStreamSettingsSecurityReality,
-  isXrayStreamSettingsSecurityTls,
-  isXrayTrojan,
+  isXrayStreamSettingsSecurityTls, isXrayTrojan,
   isXrayVless,
   isXrayWs,
   showFallback,
@@ -261,10 +253,8 @@ export default {
         // 'quic',
         // 'grpc'
       ]
-      if (
-        this.isXrayShadowsocks(this.nodeProps) ||
-        this.isXraySocks(this.nodeProps)
-      ) {
+      if (this.isXrayShadowsocks(this.nodeProps) ||
+          this.isXraySocks(this.nodeProps)) {
         this.nodeProps.xrayStreamSettingsEntity.network = 'tcp'
         return ['tcp']
       } else {
@@ -306,10 +296,7 @@ export default {
     xrayProtocolChange() {
       if (isXrayVless(this.nodeProps)) {
         this.nodeProps.xrayStreamSettingsEntity.security = 'reality'
-      } else if (
-        isXrayShadowsocks(this.nodeProps) ||
-        isXraySocks(this.nodeProps)
-      ) {
+      } else if (isXrayShadowsocks(this.nodeProps) || isXraySocks(this.nodeProps)) {
         this.nodeProps.xrayStreamSettingsEntity.security = 'none'
       } else {
         this.nodeProps.xrayStreamSettingsEntity.security = 'tls'
@@ -322,9 +309,9 @@ export default {
     },
     xrayStreamSettingsSecurityChange() {
       if (
-        isXrayVless(this.nodeProps) &&
-        (this.nodeProps.xrayStreamSettingsEntity.security === 'tls' ||
-          this.nodeProps.xrayStreamSettingsEntity.security === 'reality')
+          isXrayVless(this.nodeProps) &&
+          (this.nodeProps.xrayStreamSettingsEntity.security === 'tls' ||
+              this.nodeProps.xrayStreamSettingsEntity.security === 'reality')
       ) {
         this.nodeProps.xrayFlow = 'xtls-rprx-vision'
       } else {

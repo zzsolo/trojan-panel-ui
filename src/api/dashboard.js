@@ -22,9 +22,6 @@ export function trafficRank(data) {
   return request({
     url: '/dashboard/trafficRank',
     method: 'get',
-    params: {
-      ...data,
-      includeAdmin: true // 包含管理员用户在排行榜中
-    }
+    params: data
   })
 }

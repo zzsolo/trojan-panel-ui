@@ -21,10 +21,6 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    // 在这里添加 watchOptions
-    watchOptions: {
-      ignored: /System Volume Information/
-    },
     proxy: {
       '/api': {
         target: `http://127.0.0.1:8081/api`,
