@@ -236,12 +236,7 @@ export default {
         // 模拟点击下载
         a.click()
         window.URL.revokeObjectURL(url)
-        this.$notify({
-          title: 'Success',
-          message: this.$t('confirm.taskDownloadSuccess'),
-          type: 'success',
-          duration: 2000
-        })
+        // No success notification needed - handled by global request interceptor
       })
     }
   }

@@ -49,12 +49,7 @@ export default {
       let formData = new FormData()
       formData.append('file', params.file)
       uploadWebFile(formData).then(() => {
-        this.$notify({
-          title: 'Success',
-          message: this.$t('confirm.uploadWebFileSuccess'),
-          type: 'success',
-          duration: 2000
-        })
+        // No success notification needed - handled by global request interceptor
       })
       this.fileList = []
     },

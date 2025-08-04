@@ -164,12 +164,7 @@ export default {
           createNodeServer(this.nodeServer).then(() => {
             this.getList()
             this.$emit('update:dialogVisible', false)
-            this.$notify({
-              title: 'Success',
-              message: this.$t('confirm.createSuccess'),
-              type: 'success',
-              duration: 2000
-            })
+            // No success notification needed - handled by global request interceptor
           })
         }
       })
@@ -181,12 +176,7 @@ export default {
           updateNodeServerById(tempData).then(() => {
             this.getList()
             this.$emit('update:dialogVisible', false)
-            this.$notify({
-              title: 'Success',
-              message: this.$t('confirm.modifySuccess'),
-              type: 'success',
-              duration: 2000
-            })
+            // No success notification needed - handled by global request interceptor
           })
         }
       })

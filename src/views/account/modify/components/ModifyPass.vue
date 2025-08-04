@@ -148,12 +148,6 @@ export default {
             this.$nextTick(() => {
               this.$refs['dataForm'].clearValidate()
             })
-            this.$notify({
-              title: 'Success',
-              message: this.$t('confirm.updateAccountPass'),
-              type: 'success',
-              duration: 2000
-            })
           })
         }
       })

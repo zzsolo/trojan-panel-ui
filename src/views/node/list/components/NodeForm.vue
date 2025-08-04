@@ -1095,12 +1095,7 @@ export default {
           createNode(this.nodeProps).then(() => {
             this.getListProps()
             this.$emit('update:dialogFormVisibleProps', false)
-            this.$notify({
-              title: 'Success',
-              message: this.$t('confirm.createSuccess').toString(),
-              type: 'success',
-              duration: 2000
-            })
+            // No success notification needed - handled by global request interceptor
           })
         }
       })
@@ -1116,12 +1111,7 @@ export default {
           updateNodeById(nodePropsData).then(() => {
             this.getListProps()
             this.$emit('update:dialogFormVisibleProps', false)
-            this.$notify({
-              title: 'Success',
-              message: this.$t('confirm.modifySuccess').toString(),
-              type: 'success',
-              duration: 2000
-            })
+            // No success notification needed - handled by global request interceptor
           })
         }
       })

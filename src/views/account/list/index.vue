@@ -96,7 +96,7 @@
         type="primary"
         icon="el-icon-edit"
         @click="handleCreate"
-        v-if="checkPermission(['sysadmin'])"
+        v-if="checkPermission(['sysadmin', 'admin'])"
       >
         {{ $t('table.add') }}
       </el-button>
@@ -105,7 +105,7 @@
         type="success"
         icon="el-icon-upload2"
         @click="handleImport"
-        v-if="checkPermission(['sysadmin'])"
+        v-if="checkPermission(['sysadmin', 'admin'])"
       >
         {{ $t('table.import') }}
       </el-button>
@@ -114,7 +114,7 @@
         type="success"
         icon="el-icon-download"
         @click="handleExport"
-        v-if="checkPermission(['sysadmin'])"
+        v-if="checkPermission(['sysadmin', 'admin'])"
       >
         {{ $t('table.export') }}
       </el-button>
@@ -123,7 +123,7 @@
         type="success"
         icon="el-icon-document-copy"
         @click="handleCreateBatch"
-        v-if="checkPermission(['sysadmin'])"
+        v-if="checkPermission(['sysadmin', 'admin'])"
       >
         {{ $t('table.createBatch') }}
       </el-button>
@@ -132,7 +132,7 @@
         type="success"
         icon="el-icon-download"
         @click="exportAccountUnused"
-        v-if="checkPermission(['sysadmin'])"
+        v-if="checkPermission(['sysadmin', 'admin'])"
       >
         {{ $t('table.exportAccountUnused') }}
       </el-button>
@@ -313,7 +313,7 @@
             type="primary"
             size="mini"
             @click="handleReset(row)"
-            v-if="checkPermission(['sysadmin'])"
+            v-if="checkPermission(['sysadmin', 'admin'])"
           >
             {{ $t('table.reset') }}
           </el-button>
@@ -331,7 +331,7 @@
             type="primary"
             size="mini"
             @click="handleUpdate(row)"
-            v-if="checkPermission(['sysadmin'])"
+            v-if="checkPermission(['sysadmin', 'admin'])"
           >
             {{ $t('table.edit') }}
           </el-button>
@@ -339,7 +339,7 @@
             size="mini"
             type="danger"
             @click="handleDelete(row, $index)"
-            v-if="checkPermission(['sysadmin'])"
+            v-if="checkPermission(['sysadmin', 'admin'])"
           >
             {{ $t('table.delete') }}
           </el-button>
@@ -793,12 +793,6 @@ export default {
         const tempData = Object.assign({}, row)
         deleteAccountById(tempData).then(() => {
           this.list.splice(index, 1)
-          this.$notify({
-            title: 'Success',
-            message: this.$t('confirm.deleteSuccess'),
-            type: 'success',
-            duration: 2000
-          })
         })
       })
     },
@@ -808,12 +802,6 @@ export default {
           createAccount(this.temp).then(() => {
             this.getList()
             this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: this.$t('confirm.createSuccess'),
-              type: 'success',
-              duration: 2000
-            })
           })
         }
       })
@@ -827,12 +815,6 @@ export default {
             this.temp.quota = mbToByte(this.temp.quota)
             this.list.splice(index, 1, this.temp)
             this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: this.$t('confirm.modifySuccess'),
-              type: 'success',
-              duration: 2000
-            })
           })
         }
       })
@@ -858,12 +840,6 @@ export default {
         const tempData = Object.assign({}, row)
         resetAccountDownloadAndUpload(tempData).then(() => {
           this.getList()
-          this.$notify({
-            title: 'Success',
-            message: this.$t('confirm.resetSuccess'),
-            type: 'success',
-            duration: 2000
-          })
         })
       })
     },
@@ -876,12 +852,6 @@ export default {
           formData.append('cover', tempData.cover)
           importAccount(formData).then(() => {
             this.importVisible = false
-            this.$notify({
-              title: 'Success',
-              message: this.$t('confirm.taskSubmitSuccess'),
-              type: 'success',
-              duration: 2000
-            })
           })
         }
       })
@@ -892,12 +862,6 @@ export default {
     handleExport() {
       exportAccount().then(() => {
         this.importVisible = false
-        this.$notify({
-          title: 'Success',
-          message: this.$t('confirm.taskSubmitSuccess').toString(),
-          type: 'success',
-          duration: 2000
-        })
       })
     },
     handleCreateBatch() {
@@ -908,12 +872,6 @@ export default {
     },
     exportAccountUnused() {
       exportAccountUnused().then(() => {
-        this.$notify({
-          title: 'Success',
-          message: this.$t('confirm.taskSubmitSuccess').toString(),
-          type: 'success',
-          duration: 2000
-        })
       })
     },
     downloadTemplate() {
@@ -931,12 +889,6 @@ export default {
         // 模拟点击下载
         a.click()
         window.URL.revokeObjectURL(url)
-        this.$notify({
-          title: 'Success',
-          message: this.$t('confirm.taskDownloadSuccess'),
-          type: 'success',
-          duration: 2000
-        })
       })
     },
     handleClashSubscribeForSb(row) {

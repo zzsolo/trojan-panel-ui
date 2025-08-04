@@ -76,12 +76,7 @@ export default {
         let formData = new FormData()
         formData.append('file', this.fileList[0].raw)
         uploadLogo(formData).then(() => {
-          this.$notify({
-            title: 'Success',
-            message: this.$t('confirm.modifySuccess'),
-            type: 'success',
-            duration: 2000
-          })
+          // No success notification needed - handled by global request interceptor
         })
       }
     }

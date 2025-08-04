@@ -219,12 +219,7 @@ export default {
         const tempData = Object.assign({}, row)
         deleteBlackListByIp(tempData).then(() => {
           this.list.splice(index, 1)
-          this.$notify({
-            title: 'Success',
-            message: this.$t('confirm.deleteSuccess'),
-            type: 'success',
-            duration: 2000
-          })
+          // No success notification needed - handled by global request interceptor
         })
       })
     },
@@ -234,12 +229,7 @@ export default {
           createBlackList(this.temp).then(() => {
             this.getList()
             this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: this.$t('confirm.createSuccess'),
-              type: 'success',
-              duration: 2000
-            })
+            // No success notification needed - handled by global request interceptor
           })
         }
       })

@@ -160,12 +160,7 @@ export default {
             this.$nextTick(() => {
               this.$refs['dataForm'].clearValidate()
             })
-            this.$notify({
-              title: 'Success',
-              message: this.$t('confirm.modifySuccess'),
-              type: 'success',
-              duration: 2000
-            })
+            // No success notification needed - handled by global request interceptor
           })
         }
       })

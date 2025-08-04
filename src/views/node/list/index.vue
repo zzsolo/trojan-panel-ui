@@ -37,7 +37,7 @@
         type="primary"
         icon="el-icon-edit"
         @click="handleCreate"
-        v-if="checkPermission(['sysadmin', 'admin'])"
+        v-if="checkPermission(['sysadmin'])"
       >
         {{ $t('table.add') }}
       </el-button>
@@ -153,7 +153,7 @@
             type="primary"
             size="mini"
             @click="handleUpdate(row)"
-            v-if="checkPermission(['sysadmin', 'admin'])"
+            v-if="checkPermission(['sysadmin'])"
           >
             {{ $t('table.edit') }}
           </el-button>
@@ -170,7 +170,7 @@
             size="mini"
             type="danger"
             @click="handleDelete(row, $index)"
-            v-if="checkPermission(['sysadmin', 'admin'])"
+            v-if="checkPermission(['sysadmin'])"
           >
             {{ $t('table.delete') }}
           </el-button>
@@ -633,12 +633,6 @@ export default {
         const tempData = Object.assign({}, row)
         deleteNodeById(tempData).then(() => {
           this.list.splice(index, 1)
-          this.$notify({
-            title: 'Success',
-            message: this.$t('confirm.deleteSuccess').toString(),
-            type: 'success',
-            duration: 2000
-          })
         })
       })
     },
@@ -652,7 +646,12 @@ export default {
     },
     handleCopyURL(row) {
       nodeURL(row).then((response) => {
-        if (copy(response.data)) {
+        let url = response.data
+        // 修复trojan-go链接问题：将trojan-go://替换为trojan://
+        if (url && url.startsWith('trojan-go://')) {
+          url = url.replace('trojan-go://', 'trojan://')
+        }
+        if (copy(url)) {
           Message({
             showClose: true,
             message: this.$t('confirm.urlCopySuccess').toString(),

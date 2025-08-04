@@ -305,12 +305,7 @@ export default {
         const tempData = Object.assign({}, row)
         deleteNodeServerById(tempData).then(() => {
           this.list.splice(index, 1)
-          this.$notify({
-            title: 'Success',
-            message: this.$t('confirm.deleteSuccess'),
-            type: 'success',
-            duration: 2000
-          })
+          // No success notification needed - handled by global request interceptor
         })
       })
     },
@@ -333,12 +328,7 @@ export default {
           formData.append('cover', tempData.cover)
           importNodeServer(formData).then(() => {
             this.importVisible = false
-            this.$notify({
-              title: 'Success',
-              message: this.$t('confirm.taskSubmitSuccess'),
-              type: 'success',
-              duration: 2000
-            })
+            // No success notification needed - handled by global request interceptor
           })
         }
       })
@@ -349,12 +339,7 @@ export default {
     handleExport() {
       exportNodeServer().then(() => {
         this.importVisible = false
-        this.$notify({
-          title: 'Success',
-          message: this.$t('confirm.taskSubmitSuccess'),
-          type: 'success',
-          duration: 2000
-        })
+        // No success notification needed - handled by global request interceptor
       })
     },
     downloadTemplate() {
@@ -372,12 +357,7 @@ export default {
         // 模拟点击下载
         a.click()
         window.URL.revokeObjectURL(url)
-        this.$notify({
-          title: 'Success',
-          message: this.$t('confirm.taskDownloadSuccess'),
-          type: 'success',
-          duration: 2000
-        })
+        // No success notification needed - handled by global request interceptor
       })
     }
   }
