@@ -93,25 +93,42 @@ function showOperationNotification(config, isStart = true) {
   const requestConfig = getRequestConfig(config.url)
   const operationId = generateOperationId(config)
   
-  if (!requestConfig.critical) return null
+  console.log('🔍 [DEBUG] showOperationNotification:', {
+    url: config.url,
+    isStart,
+    requestConfig,
+    operationId,
+    isCritical: requestConfig.critical
+  })
+  
+  if (!requestConfig.critical) {
+    console.log('🔍 [DEBUG] 非关键操作，跳过通知')
+    return null
+  }
   
   if (isStart) {
-    const notification = Notification({
-      title: i18n.t('notice.operationStart') || '操作进行中',
-      message: getOperationMessage(config.url, 'start'),
+    console.log('🔍 [DEBUG] 显示操作开始通知...')
+    // 使用Message而不是Notification来确保可见性
+    const startMessage = getOperationMessage(config.url, 'start')
+    const message = Message({
+      message: startMessage,
       type: 'info',
-      duration: 0, // 不自动关闭，等待结果
-      showClose: true,
-      customClass: 'operation-notification-fade'
+      duration: 0, // 不自动关闭
+      showClose: true
     })
     
-    pendingOperations.set(operationId, notification)
-    return notification
+    pendingOperations.set(operationId, message)
+    console.log('🔍 [DEBUG] 开始通知已创建并保存:', message)
+    return message
   } else {
-    const notification = pendingOperations.get(operationId)
-    if (notification) {
-      notification.close()
+    console.log('🔍 [DEBUG] 关闭操作开始通知...')
+    const message = pendingOperations.get(operationId)
+    if (message) {
+      message.close()
       pendingOperations.delete(operationId)
+      console.log('🔍 [DEBUG] 操作通知已关闭')
+    } else {
+      console.log('🔍 [DEBUG] 未找到对应的操作通知')
     }
   }
 }
@@ -160,12 +177,20 @@ function getOperationMessage(url, type) {
     }
   }
   
+  console.log('🔍 [DEBUG] getOperationMessage:', {
+    url,
+    type,
+    availablePatterns: Object.keys(messages)
+  })
+  
   for (const pattern in messages) {
     if (pattern !== 'default' && url.includes(pattern)) {
+      console.log('🔍 [DEBUG] 匹配到模式:', pattern, '返回消息:', messages[pattern][type])
       return messages[pattern][type]
     }
   }
   
+  console.log('🔍 [DEBUG] 使用默认消息:', messages.default[type])
   return messages.default[type]
 }
 
@@ -176,6 +201,13 @@ const service = axios.create({
 
 service.interceptors.request.use(
   (config) => {
+    console.log('🔍 [DEBUG] 发送请求:', {
+      url: config.url,
+      method: config.method,
+      data: config.data,
+      params: config.params
+    })
+    
     // 动态设置超时时间
     const requestConfig = getRequestConfig(config.url)
     config.timeout = requestConfig.timeout
@@ -199,26 +231,62 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   (response) => {
+    console.log('🔍 [DEBUG] 收到响应:', {
+      url: response.config.url,
+      method: response.config.method,
+      status: response.status,
+      data: response.data
+    })
+    
     // 关闭操作通知
     showOperationNotification(response.config, false)
     
     const res = response.data
     if (res.code === 20000) {
+      console.log('🔍 [DEBUG] 响应成功，检查是否需要显示通知...')
       // 显示成功通知
       const requestConfig = getRequestConfig(response.config.url)
+      console.log('🔍 [DEBUG] 请求配置:', requestConfig)
+      
       if (requestConfig.critical) {
-        Notification({
-          title: i18n.t('notice.operationSuccess') || '操作成功',
-          message: getOperationMessage(response.config.url, 'success'),
-          type: 'success',
-          duration: 3000,
-          customClass: 'operation-notification-fade'
-        })
+        console.log('🔍 [DEBUG] 显示成功通知...')
+        
+        // 简化的成功通知 - 使用Message确保可见性
+        const successMessage = getOperationMessage(response.config.url, 'success')
+        console.log('🔍 [DEBUG] 成功消息内容:', successMessage)
+        
+        // 延迟显示成功通知，确保用户能看到
+        setTimeout(() => {
+          Message({
+            message: successMessage,
+            type: 'success',
+            duration: 3000
+          })
+          console.log('🔍 [DEBUG] 成功Message已显示')
+        }, 300)
+        
+        // 同时尝试使用Notification（如果可用）
+        setTimeout(() => {
+          try {
+            Notification({
+              title: i18n.t('notice.operationSuccess') || '操作成功',
+              message: successMessage,
+              type: 'success',
+              duration: 3000
+            })
+            console.log('🔍 [DEBUG] 成功Notification已显示')
+          } catch (error) {
+            console.log('🔍 [DEBUG] Notification不可用，仅使用Message')
+          }
+        }, 600)
+      } else {
+        console.log('🔍 [DEBUG] 非关键操作，不显示通知')
       }
       return res
     } else if (res instanceof Blob) {
       return response
     } else {
+      console.log('🔍 [DEBUG] 响应错误:', res)
       // 关闭操作通知
       showOperationNotification(response.config, false)
       
@@ -275,13 +343,33 @@ service.interceptors.response.use(
     // 其他错误处理
     const requestConfig = getRequestConfig(config.url)
     if (requestConfig.critical) {
-      Notification({
-        title: i18n.t('notice.operationError') || '操作失败',
-        message: getOperationMessage(config.url, 'error'),
-        type: 'error',
-        duration: 5000,
-        customClass: 'operation-notification-fade'
-      })
+      const errorMessage = getOperationMessage(config.url, 'error')
+      console.log('🔍 [DEBUG] 显示关键操作错误通知:', errorMessage)
+      
+      // 使用Message确保错误通知可见
+      setTimeout(() => {
+        Message({
+          message: errorMessage,
+          type: 'error',
+          duration: 5000
+        })
+        console.log('🔍 [DEBUG] 错误Message已显示')
+      }, 300)
+      
+      // 同时尝试Notification
+      setTimeout(() => {
+        try {
+          Notification({
+            title: i18n.t('notice.operationError') || '操作失败',
+            message: errorMessage,
+            type: 'error',
+            duration: 5000
+          })
+          console.log('🔍 [DEBUG] 错误Notification已显示')
+        } catch (error) {
+          console.log('🔍 [DEBUG] Notification不可用，仅使用Message')
+        }
+      }, 600)
     } else {
       Message({
         message: error.message,
