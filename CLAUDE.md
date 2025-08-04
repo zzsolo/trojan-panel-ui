@@ -75,3 +75,11 @@ This is a Vue 2.x admin panel for managing Trojan proxy services with role-based
 - Route permissions are filtered dynamically based on user roles
 - Login process supports optional captcha based on system settings
 - Node management supports multiple proxy types with specialized form components
+
+### Critical Bug Fixes
+**Role Mapping Issue (Fixed)**: 
+- **Problem**: role_id=2 (admin) users could not login due to data format mismatch
+- **Root Cause**: API returned numeric role_id [2] but permission system expected string roles ['admin']
+- **Solution**: Added role mapping logic in `src/store/modules/account.js:86-111`
+- **Mapping**: role_id 1→'sysadmin', 2→'admin', 3→'user'
+- **Status**: ✅ Fixed - all roles should now work correctly

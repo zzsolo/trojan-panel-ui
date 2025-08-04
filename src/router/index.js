@@ -170,7 +170,7 @@ export const asyncRoutes = [
       title: 'emailManage',
       name: 'emailManage',
       icon: 'email',
-      roles: ['sysadmin', 'admin']
+      roles: ['sysadmin']
     },
     children: [
       {
@@ -180,7 +180,7 @@ export const asyncRoutes = [
         meta: {
           title: 'emailRecord',
           name: 'emailRecord',
-          roles: ['sysadmin', 'admin']
+          roles: ['sysadmin']
         }
       }
     ]
@@ -195,7 +195,7 @@ export const asyncRoutes = [
       title: 'taskManage',
       name: 'taskManage',
       icon: 'task',
-      roles: ['sysadmin', 'admin']
+      roles: ['sysadmin']
     },
     children: [
       {

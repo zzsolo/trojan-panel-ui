@@ -26,16 +26,25 @@ router.beforeEach(async (to, from, next) => {
         next()
       } else {
         try {
+          console.log('🔍 [DEBUG] 开始获取用户信息和路由权限...')
           const { roles } = await store.dispatch('account/getAccountInfo')
+          console.log('🔍 [DEBUG] 获取到的用户角色:', roles)
+          
           const accessRoutes = await store.dispatch(
             'permission/generateRoutes',
             roles
           )
+          console.log('🔍 [DEBUG] 生成的可访问路由数量:', accessRoutes.length)
+          
           for (let i = 0; i < accessRoutes.length; i++) {
+            console.log('🔍 [DEBUG] 添加路由:', accessRoutes[i].name || accessRoutes[i].path)
             router.addRoute(accessRoutes[i])
           }
+          
+          console.log('🔍 [DEBUG] 路由添加完成，准备跳转到:', to.path)
           next({ ...to, replace: true })
         } catch (error) {
+          console.error('🔍 [DEBUG] 权限验证失败:', error)
           await store.dispatch('account/resetToken')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)

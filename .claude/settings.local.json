@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(node:*)",
+      "Bash(npm run serve:*)",
+      "Bash(NODE_OPTIONS=\"--openssl-legacy-provider\" npm run serve)",
+      "Bash(NODE_OPTIONS=\"--openssl-legacy-provider\" npm run build)",
+      "Bash(curl:*)",
+      "Bash(dir:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(set:*)",
+      "Bash($env:NODE_OPTIONS=\"--openssl-legacy-provider\")",
+      "Bash(rg:*)",
+      "Bash(export:*)",
+      "Bash(NODE_OPTIONS=--openssl-legacy-provider npm run build)",
+      "Bash(npm run lint)",
+      "Bash(npx vue-cli-service build:*)",
+      "Bash(yarn:*)",
+      "Bash(nvm:*)",
+      "Bash(winget install:*)",
+      "Bash(scoop:*)",
+      "Bash(unzip:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(./node.exe:*)"
+    ],
+    "deny": []
+  }
+}

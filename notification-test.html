@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通知系统测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .test-button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .test-button.primary {
+            background: #409EFF;
+            color: white;
+        }
+        .test-button.success {
+            background: #67C23A;
+            color: white;
+        }
+        .test-button.warning {
+            background: #E6A23C;
+            color: white;
+        }
+        .test-button.danger {
+            background: #F56C6C;
+            color: white;
+        }
+        .log-area {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        .log-entry {
+            margin: 2px 0;
+            padding: 2px 0;
+        }
+        .log-entry.debug {
+            color: #6c757d;
+        }
+        .log-entry.info {
+            color: #17a2b8;
+        }
+        .log-entry.success {
+            color: #28a745;
+        }
+        .log-entry.warning {
+            color: #ffc107;
+        }
+        .log-entry.error {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>通知系统测试页面</h1>
+        
+        <div class="test-section">
+            <h3>1. 测试密码修改功能</h3>
+            <p>这个测试将模拟密码修改的完整流程，包括：</p>
+            <ul>
+                <li>发送密码修改请求</li>
+                <li>显示"正在修改密码..."通知</li>
+                <li>接收成功响应</li>
+                <li>显示"密码修改成功"通知</li>
+            </ul>
+            <button class="test-button primary" onclick="testPasswordChange()">测试密码修改</button>
+        </div>
+
+        <div class="test-section">
+            <h3>2. 测试其他操作</h3>
+            <button class="test-button success" onclick="testSuccessOperation()">测试成功操作</button>
+            <button class="test-button danger" onclick="testFailedOperation()">测试失败操作</button>
+            <button class="test-button warning" onclick="testTimeoutOperation()">测试超时操作</button>
+        </div>
+
+        <div class="test-section">
+            <h3>3. 调试日志</h3>
+            <p>下面的日志区域将显示所有调试信息，帮助您了解通知系统的工作流程：</p>
+            <div class="log-area" id="logArea"></div>
+            <button class="test-button" onclick="clearLogs()">清空日志</button>
+        </div>
+    </div>
+
+    <script>
+        // 模拟的调试日志功能
+        function log(message, type = 'debug') {
+            const logArea = document.getElementById('logArea');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logArea.appendChild(logEntry);
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+
+        function clearLogs() {
+            document.getElementById('logArea').innerHTML = '';
+        }
+
+        // 模拟的请求函数
+        function simulateRequest(url, method = 'POST', data = null) {
+            return new Promise((resolve, reject) => {
+                log(`发送模拟请求: ${method} ${url}`, 'info');
+                log(`请求数据: ${JSON.stringify(data)}`, 'info');
+                
+                // 模拟网络延迟
+                setTimeout(() => {
+                    if (url.includes('updateAccountPass')) {
+                        // 模拟密码修改成功
+                        log('收到模拟响应: {code: 20000, message: "密码修改成功"}', 'success');
+                        resolve({
+                            data: {
+                                code: 20000,
+                                message: '密码修改成功',
+                                data: null
+                            }
+                        });
+                    } else if (url.includes('error')) {
+                        // 模拟失败响应
+                        log('收到模拟响应: {code: 50000, message: "操作失败"}', 'error');
+                        resolve({
+                            data: {
+                                code: 50000,
+                                message: '操作失败',
+                                data: null
+                            }
+                        });
+                    } else if (url.includes('timeout')) {
+                        // 模拟超时
+                        log('请求超时', 'warning');
+                        reject(new Error('请求超时'));
+                    } else {
+                        // 模拟成功响应
+                        log('收到模拟响应: {code: 20000, message: "操作成功"}', 'success');
+                        resolve({
+                            data: {
+                                code: 20000,
+                                message: '操作成功',
+                                data: null
+                            }
+                        });
+                    }
+                }, 2000); // 2秒延迟
+            });
+        }
+
+        // 模拟的通知函数
+        function showNotification(title, message, type = 'info', duration = 3000) {
+            log(`显示通知: ${title} - ${message} (${type})`, type);
+            
+            // 创建模拟的通知元素
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 4px;
+                color: white;
+                font-weight: bold;
+                z-index: 9999;
+                min-width: 300px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            // 根据类型设置颜色
+            const colors = {
+                success: '#67C23A',
+                error: '#F56C6C',
+                warning: '#E6A23C',
+                info: '#409EFF'
+            };
+            notification.style.backgroundColor = colors[type] || colors.info;
+            
+            notification.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 5px;">${title}</div>
+                <div style="font-size: 14px;">${message}</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // 自动关闭
+            if (duration > 0) {
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease-in';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }, duration);
+            }
+        }
+
+        // 添加动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 测试函数
+        async function testPasswordChange() {
+            log('开始测试密码修改功能...', 'info');
+            
+            try {
+                // 模拟显示开始通知
+                showNotification('操作进行中', '正在修改密码...', 'info', 0);
+                
+                // 模拟发送请求
+                const response = await simulateRequest('/account/updateAccountPass', 'POST', {
+                    username: 'testuser',
+                    oldPass: 'oldpassword',
+                    newPass: 'newpassword'
+                });
+                
+                // 关闭开始通知
+                log('关闭操作开始通知', 'info');
+                
+                if (response.data.code === 20000) {
+                    // 显示成功通知
+                    showNotification('操作成功', '密码修改成功', 'success', 3000);
+                    log('密码修改测试完成！', 'success');
+                } else {
+                    // 显示失败通知
+                    showNotification('操作失败', response.data.message, 'error', 5000);
+                    log('密码修改测试失败！', 'error');
+                }
+            } catch (error) {
+                // 关闭开始通知
+                log('关闭操作开始通知', 'info');
+                
+                // 显示错误通知
+                showNotification('操作失败', error.message, 'error', 5000);
+                log('密码修改测试出现异常！', 'error');
+            }
+        }
+
+        async function testSuccessOperation() {
+            log('开始测试成功操作...', 'info');
+            showNotification('操作进行中', '正在处理请求...', 'info', 0);
+            
+            try {
+                const response = await simulateRequest('/api/test', 'POST', {});
+                log('关闭操作开始通知', 'info');
+                showNotification('操作成功', '操作完成', 'success', 3000);
+                log('成功操作测试完成！', 'success');
+            } catch (error) {
+                log('关闭操作开始通知', 'info');
+                showNotification('操作失败', error.message, 'error', 5000);
+                log('成功操作测试失败！', 'error');
+            }
+        }
+
+        async function testFailedOperation() {
+            log('开始测试失败操作...', 'info');
+            showNotification('操作进行中', '正在处理请求...', 'info', 0);
+            
+            try {
+                const response = await simulateRequest('/api/error', 'POST', {});
+                log('关闭操作开始通知', 'info');
+                showNotification('操作失败', '操作失败', 'error', 5000);
+                log('失败操作测试完成！', 'success');
+            } catch (error) {
+                log('关闭操作开始通知', 'info');
+                showNotification('操作失败', error.message, 'error', 5000);
+                log('失败操作测试完成！', 'success');
+            }
+        }
+
+        async function testTimeoutOperation() {
+            log('开始测试超时操作...', 'info');
+            showNotification('操作进行中', '正在处理请求...', 'info', 0);
+            
+            try {
+                const response = await simulateRequest('/api/timeout', 'POST', {});
+                log('关闭操作开始通知', 'info');
+                showNotification('操作成功', '操作完成', 'success', 3000);
+                log('超时操作测试完成！', 'success');
+            } catch (error) {
+                log('关闭操作开始通知', 'info');
+                showNotification('操作失败', error.message, 'error', 5000);
+                log('超时操作测试完成！', 'success');
+            }
+        }
+
+        // 页面加载完成后的初始化
+        window.onload = function() {
+            log('通知系统测试页面已加载', 'success');
+            log('请点击上方按钮开始测试各种操作', 'info');
+        };
+    </script>
+</body>
+</html>

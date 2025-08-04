@@ -197,3 +197,38 @@ aside {
 .multiselect--active {
   z-index: 1000 !important;
 }
+
+// 操作通知淡入淡出效果
+.operation-notification-fade {
+  animation: notificationFadeIn 0.3s ease-in-out;
+  
+  &.el-notification {
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  &.fade-out {
+    animation: notificationFadeOut 0.3s ease-in-out;
+  }
+}
+
+@keyframes notificationFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes notificationFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}

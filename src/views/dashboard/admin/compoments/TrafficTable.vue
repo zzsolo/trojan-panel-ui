@@ -30,6 +30,7 @@
 <script>
 import { trafficRank } from '@/api/dashboard'
 import { getFlow } from '@/utils/account'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'trafficTable',
@@ -38,14 +39,30 @@ export default {
       list: null
     }
   },
+  computed: {
+    ...mapGetters(['roles'])
+  },
   created() {
     this.fetchData()
   },
   methods: {
     getFlow,
     fetchData() {
-      trafficRank().then((response) => {
+      // 调试信息：记录当前用户角色
+      console.log('🔍 [DEBUG] 当前用户角色:', this.roles)
+      
+      // 如果是管理员或超级管理员，包含所有用户；否则只显示普通用户
+      const includeAllRoles = this.roles.includes('sysadmin') || this.roles.includes('admin')
+      
+      // 调试信息：记录API调用参数
+      console.log('🔍 [DEBUG] API调用参数 includeAllRoles:', includeAllRoles)
+      
+      trafficRank({ includeAllRoles }).then((response) => {
+        // 调试信息：记录API返回的数据
+        console.log('🔍 [DEBUG] API返回数据:', response.data)
         this.list = response.data
+      }).catch((error) => {
+        console.error('🔍 [DEBUG] API调用失败:', error)
       })
     }
   }
